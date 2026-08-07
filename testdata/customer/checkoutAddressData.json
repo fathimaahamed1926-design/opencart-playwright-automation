@@ -1,0 +1,35 @@
+{
+  "billingAddress": {
+    "firstName": "Fathima",
+    "lastName": "Ahamed",
+    "companyName": "Tech Solutions",
+    "address1": "123 Main Street",
+    "address2": "Apt 4B",
+    "city": "Springfield",
+    "postcode": "6000",
+    "country": "Australia",
+    "state": "Western Australia"
+  },
+  "newBillingAddress": {
+    "firstName": "Mariam",
+    "lastName": "Sahana",
+    "companyName": "Tech Solutions",
+    "address1": "456 Main Street",
+    "address2": "Apt 50",
+    "city": "Strathfield",
+    "postcode": "6000",
+    "country": "Australia",
+    "state": "Western Australia"
+  },
+  "shippingAddress": {
+    "firstName": "Fathima",
+    "lastName": "Ahamed",
+    "companyName": "Tech Solutions",
+    "address1": "123 Main Street",
+    "address2": "Apt 4B",
+    "city": "Springfield",
+    "postcode": "6000",
+    "country": "Australia",
+    "state": "Western Australia"
+  }
+}

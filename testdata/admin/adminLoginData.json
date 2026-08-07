@@ -1,0 +1,21 @@
+{
+  "validUser": {
+    "email": "admin",
+    "password": "admin"
+  },
+
+  "invalidPassword": {
+    "email": "admin",
+    "password": "wrongPassword"
+  },
+
+  "invalidUser": {
+    "email": "wrongUser",
+    "password": "admin"
+  },
+
+  "invalidCredentials": {
+    "email": "wrongUser",
+    "password": "wrongPassword"
+  }
+}

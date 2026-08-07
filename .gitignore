@@ -1,9 +1,37 @@
-
-# Playwright
+# Dependencies
 node_modules/
+
+# Playwright test output
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Authentication state
 /playwright/.auth/
+auth-*.json
+# Environment files
 .env.*
+env/.env.*
+# Keep example environment configuration in Git
+!.env.example
+
+# Test reporting
+/allure-results/
+/allure-report/
+/reports/
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Personal development notes
+docs/ImportantNotes.md
+docs/SQL.md
+docs/PlaywrightFrameworkDesignGuidelines.md
+docs/Troubleshooting.md
+docs/FrameworkArchitecture.md

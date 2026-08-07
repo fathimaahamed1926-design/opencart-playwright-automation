@@ -2,7 +2,9 @@
   "name": "playwright-opencart-demo",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "codegen": "npx ts-node scripts/codegen.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,7 +17,9 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
+    "axios": "^1.15.2",
     "csv-parse": "^6.2.1",
+    "mysql2": "^3.23.2",
     "xlsx": "^0.18.5"
   }
 }

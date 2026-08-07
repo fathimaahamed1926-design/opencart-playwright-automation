@@ -44,4 +44,12 @@ export class RandomDataGenerator {
   static generateRandomCompanyName(): string {
     return faker.company.name();
   }
+
+  static generateRandomProductName(): string {
+    return `Automation Product-${faker.string.alphanumeric(6)}`;
+  }
+
+  static generateRandomProductModel(): string {
+    return `Automation Model-${faker.string.alphanumeric(6)}`;
+  }
 }
