@@ -17,5 +17,6 @@ export const CategoryMessages = {
 } as const;
 
 export const OrderMessages = {
-    ORDER_UPDATED: "Success: You have modified orders!"
+    ORDER_UPDATED: "Success: You have modified orders!",
+    ORDER_CONFIRMED: "Your order has been placed!"
 } as const;

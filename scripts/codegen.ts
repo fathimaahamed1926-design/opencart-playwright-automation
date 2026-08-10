@@ -5,12 +5,12 @@ import path from 'path';
 import fs from 'fs'; // Importing the fs module to interact with the file system, specifically to check for the existence of the authentication storage file.
 
 const env = process.argv[2] || 'local';  // The first command-line argument specifies the environment (e.g., local, staging, production). If not provided, it defaults to 'local'.
-const type = process.argv[3] || 'base';  // The second command-line argument specifies the type (e.g., admin, base). If not provided, it defaults to 'base'.
+const type = process.argv[3] || 'customer';  // The second command-line argument specifies the type (e.g., admin, base). If not provided, it defaults to 'base'.
 const envPath = path.resolve(__dirname, '..', 'env', `.env.${env}`); // Constructing the absolute path to the .env file based on the specified environment. It assumes that the .env files are located in a directory named 'env' at the root of the project.
 
 dotenv.config({ path: envPath}); // Loading the environment variables from the specified .env file using dotenv.
 
-const targetUrl = type === 'admin' ? process.env.ADMIN_URL : process.env.BASE_URL; 
+const targetUrl = type === 'admin' ? process.env.ADMIN_URL : process.env.CUSTOMER_URL; 
 
 const authFile = `auth-${env}-${type}.json`;   // Constructing the filename for the authentication storage based on the environment and type.
 

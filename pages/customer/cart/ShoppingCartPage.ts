@@ -1,12 +1,15 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from '../../BasePage';
+import { HeaderComponent } from "../../../components/customer/HeaderComponent";
 
 export class ShoppingCartPage extends BasePage {
+  readonly header: HeaderComponent;
   private readonly cartTable = this.page.locator('.table-responsive');
-  private readonly checkoutButton = this.page.getByRole('link', { name: 'Checkout' });
+  private readonly checkoutButton = this.page.locator('div.buttons.clearfix').getByRole('link', { name: 'Checkout' });
 
   constructor(page: Page) {
     super(page);
+    this.header= new HeaderComponent(page);
   }
 
   //Locator Functions
@@ -47,9 +50,8 @@ export class ShoppingCartPage extends BasePage {
     const row = this.getProductRow(productName);
     const qtyInput = this.getRowInputQuantity(row);
 
-    await qtyInput.clear();
     await qtyInput.fill(quantity);
-    await row.getByRole('button', { name: 'Update' }).click();
+    await row.locator("button[data-original-title='Update']").click();
 
     // wait for the success message to ensure the update finished
     await expect(this.page.locator('.alert-success')).toBeVisible();

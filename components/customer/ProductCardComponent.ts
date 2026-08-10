@@ -1,21 +1,45 @@
-import { Locator } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 export class ProductCard {
-  constructor(private readonly container: Locator) { }
 
-     get title() {
+  constructor(private readonly container: Locator) {
+    
+   }
+
+    private get title() {
       return this.container.locator('h4 a');
      }
-      get price() { 
+
+    private get image() {
+    return this.container.locator(".image a");
+     }
+
+    private  get price() { 
       return this.container.locator('.price');
      }
 
-     get addToCartButton() { 
+    private get addToCartButton() { 
       return this.container.getByRole('button', { name: 'Add to Cart' }); 
+    }
+
+    private get compareThisProductButton() {
+      return this.container.locator("button[data-original-title='Compare this Product']"); 
+    }
+
+    async clickProduct() {
+        await this.title.click();
+    }
+
+    async clickImage() {
+        await this.image.click();
     }
 
      async addToCart() {
         await this.addToCartButton.click();
+    }
+
+    async compareThisProduct() {
+        await this.compareThisProductButton.click();
     }
 
     async getTitleText(): Promise<string> {
@@ -25,5 +49,6 @@ export class ProductCard {
     async getPriceText(): Promise<string> {
         return await this.price.textContent() || '';
     }
+
 
 }

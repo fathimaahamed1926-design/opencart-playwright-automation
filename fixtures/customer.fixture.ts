@@ -1,4 +1,4 @@
-import {test as base} from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { HomePage } from '../pages/customer/home/HomePage';
 import { LoginPage } from '../pages/customer/login/LoginPage';
 import { LogoutPage } from '../pages/customer/logout/LogoutPage';
@@ -8,37 +8,37 @@ import { CheckoutPage } from '../pages/customer/cart/CheckoutPage';
 import { MyAccountPage } from '../pages/customer/myAccount/MyAccountPage';
 
 type customerFixtures = {
-  homePage:HomePage;
-  loginPage:LoginPage;
-  logoutPage:LogoutPage;
-  productPage:ProductPage;
-  shoppingCartPage:ShoppingCartPage;
-  checkoutPage:CheckoutPage;  
-  myAccountPage:MyAccountPage;
-} 
+  homePage: HomePage;
+  logoutPage: LogoutPage;
+  productPage: ProductPage;
+  shoppingCartPage: ShoppingCartPage;
+  checkoutPage: CheckoutPage;
+  myAccountPage: MyAccountPage;
+}
 
 export const test = base.extend<customerFixtures>({
   homePage:async({page}, use)=> {
     await use(new HomePage(page));
   },
-  loginPage:async({page},use) => {
+  /*loginPage:async({page},use) => {
     await use(new LoginPage(page));
-  },
-  logoutPage:async({page},use) => {
+  },*/
+  logoutPage: async ({ page }, use) => {
     await use(new LogoutPage(page));
   },
-  productPage:async({page},use) => {
+  productPage: async ({ page }, use) => {
     await use(new ProductPage(page));
   },
-  shoppingCartPage:async({page},use) => {
+  shoppingCartPage: async ({ page }, use) => {
     await use(new ShoppingCartPage(page));
   },
-  checkoutPage:async({page},use) => {
+  checkoutPage: async ({ page }, use) => {
     await use(new CheckoutPage(page));
-  }, 
-  myAccountPage:async({page},use) => {
+  },
+  myAccountPage: async ({ page }, use) => {
     await use(new MyAccountPage(page));
   }
 
 })
+export { expect } from "@playwright/test";
 
