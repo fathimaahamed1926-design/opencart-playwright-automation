@@ -27,6 +27,11 @@ The framework covers both the **OpenCart Admin Portal** and **Customer Portal** 
 - Database-level test-data cleanup
 - Reusable database and authentication utilities
 - Playwright HTML reporting
+- Complete end-to-end customer purchase workflow
+- Search products and validate product details
+- Shopping cart quantity management
+- Checkout automation using reusable page components
+- Business-rule validation (availability before purchase)
 
 ---
 
@@ -73,6 +78,7 @@ Examples include:
 - Product components
 - Admin toolbar components
 - Alert/message components
+- ProductDetailsComponent
 
 This reduces locator duplication and improves maintainability.
 
@@ -235,6 +241,20 @@ Database-backed scenarios include:
 Customer authentication infrastructure and customer-side Page Objects are included in the framework.
 
 Additional customer workflows are being progressively added.
+
+### End-to-End Business Workflows
+
+The framework automates complete customer purchasing scenarios, including:
+
+- Product search
+- Product selection
+- Availability validation
+- Add to cart
+- Cart updates
+- Checkout
+- Order confirmation
+
+The scenarios focus on business behaviour rather than isolated UI interactions.
 
 ---
 
