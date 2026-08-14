@@ -1,13 +1,18 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from '../../BasePage';
-import { BillingInfo, ShippingInfo } from '../../../types/types';
+import { BillingInfo, NewCustomerDetails, ShippingInfo } from '../../../types/types';
 import { AddressFormComponent } from '../../../components/customer/AddressFormComponent';
+import { RegisterAccountComponent } from '../../../components/customer/RegisterAccountComponent';
+import { loginAsCustomer } from '../../../utils/authentication/customerAuth';
+import { AlertComponent } from '../../../components/common/AlertComponent';
+import { PaymentMessages } from '../../../constants/customer/messages';
 
 export class CheckoutPage extends BasePage {
 
     readonly addressForm: AddressFormComponent;
+    readonly registerAccount: RegisterAccountComponent;
+    readonly alert:AlertComponent;
     private readonly checkoutHeader: Locator;
-    private readonly continueButton: Locator;
     private readonly addressDropdown: Locator;
     private readonly flatRateRadio: Locator;
     private readonly commentSection: Locator;
@@ -24,17 +29,31 @@ export class CheckoutPage extends BasePage {
     private readonly useExistingDeliveryAddressRadio: Locator;
     private readonly useNewDeliveryAddressRadio: Locator;
     private readonly deliveryDetailsPanel: Locator;
+    private readonly checkoutOptionsPanel:Locator;
+    private readonly registerAccountRadio:Locator;
+    private readonly guestCheckoutRadio:Locator;
+    private readonly checkoutOptionsContinueButton:Locator;
+    private readonly registerAccountContinueButton:Locator;
+    private readonly guestAccountContinueButton:Locator;
+    private readonly billingDetailsPanel:Locator;
+    private readonly deliveryMethodPanel:Locator;
+    private readonly paymentMethodPanel:Locator;
 
 
     constructor(page: Page) {
         super(page);
         this.addressForm = new AddressFormComponent(page);
+        this.registerAccount = new RegisterAccountComponent(page);
+        this.alert=new AlertComponent(page);
         this.checkoutHeader = page.getByRole('heading', { name: 'Checkout', exact: true });
-        this.continueButton = page.getByRole('button', { name: 'Continue' }); // Assuming the first Continue button is for billing details
-        this.useExistingBillingAddressRadio = page.locator('#collapse-payment-address').locator('input[value="existing"]');
-        this.useNewBillingAddressRadio = page.locator('#collapse-payment-address').locator('input[value="new"]');
-        this.useExistingDeliveryAddressRadio = page.locator('#collapse-shipping-address').locator('input[value="existing"]');
-        this.useNewDeliveryAddressRadio = page.locator('#collapse-shipping-address').locator('input[value="new"]');
+        this.billingDetailsPanel = page.locator('#collapse-payment-address');
+        this.deliveryDetailsPanel = page.locator('#collapse-shipping-address');
+        this.deliveryMethodPanel = page.locator('#collapse-shipping-method');
+        this.paymentMethodPanel = page.locator('#collapse-payment-method');
+        this.useExistingBillingAddressRadio = this.billingDetailsPanel.locator('input[value="existing"]');
+        this.useNewBillingAddressRadio = this.billingDetailsPanel.locator('input[value="new"]');
+        this.useExistingDeliveryAddressRadio = this.deliveryDetailsPanel.locator('input[value="existing"]');
+        this.useNewDeliveryAddressRadio = this.deliveryDetailsPanel.locator('input[value="new"]');
         this.addressDropdown = page.locator('select[name="address_id"]');
         this.flatRateRadio = page.locator('input[value="flat.flat"]');
         this.commentSection = page.locator('textarea[name="comment"]');
@@ -46,7 +65,12 @@ export class CheckoutPage extends BasePage {
         this.deliveryDetailsContinueButton = page.locator('#button-shipping-address');
         this.deliveryMethodContinueButton = page.locator('#button-shipping-method');
         this.paymentMethodContinueButton = page.locator('#button-payment-method');
-        this.deliveryDetailsPanel = page.locator('#collapse-shipping-address');
+        this.checkoutOptionsPanel = page.locator('#collapse-checkout-option');
+        this.checkoutOptionsContinueButton = this.checkoutOptionsPanel.locator('#button-account');
+        this.registerAccountRadio = page.getByRole('radio',{name:'Register Account'});
+        this.guestCheckoutRadio = page.getByRole('radio',{name:'Guest Checkout'});
+        this.registerAccountContinueButton = page.locator('#button-register');
+        this.guestAccountContinueButton = page.locator('#button-guest');
     }
 
     async isCheckoutHeaderVisible(): Promise<boolean> {
@@ -66,7 +90,7 @@ export class CheckoutPage extends BasePage {
             // Optionally, select an existing address from the dropdown if there are multiple addresses
             await this.addressDropdown.selectOption({ index: 0 }); // Example of selecting an existing address
         }
-        await this.continueCheckoutStep(this.billingDetailsContinueButton, this.deliveryDetailsPanel);
+        await this.continueCheckoutStep(this.billingDetailsContinueButton, this.deliveryDetailsPanel); //introducing this step because of an AJAX error in loading the next panel
     }
 
     async fillDeliveryDetails(addressdata?: ShippingInfo): Promise<void> {
@@ -75,7 +99,7 @@ export class CheckoutPage extends BasePage {
             await this.addressForm.fillAddressForm(addressdata);
         } else {
             await this.useExistingDeliveryAddressRadio.check();
-            //await this.addressDropdown.selectOption({ index: 0 });
+            await this.addressDropdown.selectOption({ index: 0 });
         }
         await this.deliveryDetailsContinueButton.click();
     }
@@ -87,7 +111,7 @@ export class CheckoutPage extends BasePage {
         if (comment) {
             await this.commentSection.fill(comment);
         }
-        await this.deliveryMethodContinueButton.click();
+        await this.continueCheckoutStep(this.deliveryMethodContinueButton, this.paymentMethodPanel);
     }
 
     async selectPaymentMethod(): Promise<void> {
@@ -103,18 +127,56 @@ export class CheckoutPage extends BasePage {
         await this.confirmOrderButton.click();
     }
 
-    async verifyOderPlacedSuccessfully(): Promise<void> {
+    async verifyOrderPlacedSuccessfully(): Promise<void> {
         await this.orderConfirmationMessage.waitFor({ state: 'visible', timeout: 1000 }); // Wait for the confirmation message to be visible
         await this.verifyURLContains('route=checkout/success');
     }
 
+    // because of an AJAX error, occasionally continue button needed to be clicked twice to expand the next panel
     private async continueCheckoutStep(button: Locator, nextPanel: Locator): Promise<void> {
         await button.click();
-
         if (!(await nextPanel.isVisible())) {
             await button.click();
         }
 
         await expect(nextPanel).toBeVisible();
     }
+
+    async checkoutAsNewCustomerViaRegisterAccount(accountDetails:NewCustomerDetails) {
+        await this.registerAccountRadio.click();
+        await this.continueCheckoutStep(this.checkoutOptionsContinueButton, this.billingDetailsPanel)
+        //await this.checkoutOptionsContinueButton.click();
+        await this.registerAccount.setAccountDetails(accountDetails);
+        await this.registerAccount.subscribeNewsletter(false);
+        await this.registerAccount.checkPrivacyPolicy(true);
+        await this.registerAccountContinueButton.click();
+        await this.chooseDeliveryMethod();
+        await this.selectPaymentMethod();
+        await this.confirmOrder();
+    }
+
+    async checkoutAsNewCustomerViaGuestCheckout(guestAccountDetails:NewCustomerDetails) {
+        await this.guestCheckoutRadio.click();
+        await this.continueCheckoutStep(this.checkoutOptionsContinueButton, this.billingDetailsPanel)
+        await this.registerAccount.setGuestCheckoutDetails(guestAccountDetails);
+        //await this.continueCheckoutStep(this.guestAccountContinueButton, this.deliveryDetailsPanel);
+        await this.guestAccountContinueButton.click();
+        await this.chooseDeliveryMethod();
+        await this.selectPaymentMethod();
+        await this.confirmOrder();
+    }
+
+    async checkoutAsReturningCustomer(addressdata?: BillingInfo) {
+        await loginAsCustomer(this.page);
+        await this.fillBillingDetails(addressdata);
+        await this.billingDetailsContinueButton.click();
+        await this.selectPaymentMethod();
+        await this.confirmOrder();
+    }
+
+    async verifyNoPaymentOptionsWarningMessage() {
+        await this.alert.verifyErrorMessage(PaymentMessages.NO_PAYMENT_OPTIONS)
+    }
+
+    
 }

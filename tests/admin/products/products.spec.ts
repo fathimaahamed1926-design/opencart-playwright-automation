@@ -1,7 +1,7 @@
 import { ProductNames } from "../../../constants/admin/const";
 import { ProductMessages } from "../../../constants/admin/messages";
 import { ProductStatus } from "../../../enums/enums";
-import { test, expect } from "../../../fixtures/product.fixture";
+import { test, expect } from "../../../fixtures/testData/product.fixture";
 import { ProductDatabaseHelper } from "../../../utils/database/ProductDatabaseHelper";
 import { RandomDataGenerator } from "../../../utils/randomDataGenerator";
 

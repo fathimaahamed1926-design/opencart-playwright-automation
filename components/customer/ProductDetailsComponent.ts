@@ -20,7 +20,7 @@ export class ProductDetailsComponent {
   async setInputQuantity(quantity:number):Promise<void>{
     await this.inputQuantity.fill(quantity.toString());
   }
-  
+
   private async getDetail(label: string): Promise<string> {
     const item = this.detailsList.locator("li").filter({ hasText: label });
 
@@ -61,4 +61,8 @@ export class ProductDetailsComponent {
       await this.compareThisProductButton.click(); 
   }
 
+  async verifyProductIsInStock(): Promise<void> {
+    const availability = await this.getAvailability();
+    expect(availability).toBe("In Stock");
+}
 }

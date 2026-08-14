@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import { options } from "axios";
+import { AustralianStates } from "../constants/australia";
 
 export class RandomDataGenerator {
   static generateRandomEmail(): string {
@@ -39,6 +41,10 @@ export class RandomDataGenerator {
 
   static generateRandomCountry(): string {
     return faker.location.country();
+  }
+
+  static generateRandomState(): string {
+    return faker.helpers.arrayElement(AustralianStates);
   }
 
   static generateRandomCompanyName(): string {

@@ -1,8 +1,8 @@
 import {test, expect} from "../../../fixtures/customer.fixture"
 import { CheckoutMessages } from "../../../constants/customer/messages";
 
-test.describe("End to End Tests", ()=> {
-  test("Complete Customer Purchase Flow", async({homePage, myAccountPage, shoppingCartPage, checkoutPage, productPage})=> {
+test.describe("End to End Tests-Customer Purchase Flow", ()=> {
+  test("Customer can place order successfully", async({homePage, myAccountPage, shoppingCartPage, checkoutPage, productPage})=> {
     
     const productName = "MacBook Air";
 
@@ -21,8 +21,8 @@ test.describe("End to End Tests", ()=> {
 
     const expectedMessage = `Success: You have added ${productName} to your shopping cart!`;
     await productPage.verifyProductAddedSuccessMessage(expectedMessage);
-
     await productPage.header.navigateToShoppingCart();
+    
     await shoppingCartPage.updateQuantity(productName,"2");
 
     await shoppingCartPage.proceedToCheckout();
@@ -32,7 +32,7 @@ test.describe("End to End Tests", ()=> {
     await checkoutPage.chooseDeliveryMethod();
     await checkoutPage.selectPaymentMethod();
     await checkoutPage.confirmOrder();
-    await checkoutPage.verifyOderPlacedSuccessfully();
+    await checkoutPage.verifyOrderPlacedSuccessfully();
 
   })
 })

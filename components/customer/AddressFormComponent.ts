@@ -23,7 +23,7 @@ export class AddressFormComponent {
         this.cityInput = page.getByRole('textbox', { name: /City/ });
         this.postCodeInput = page.getByRole('textbox', { name: /Post Code/ });
         this.countrySelect = page.getByLabel('Country');
-        this.regionSelect = page.getByLabel('Region / State');
+        this.regionSelect = page.locator('#input-payment-zone');
         this.yesDefaultRadio = page.getByRole('radio', { name: 'Yes' });
         this.noDefaultRadio = page.getByRole('radio', { name: 'No' });
         this.continueButton = page.getByRole('button', { name: 'Continue' });

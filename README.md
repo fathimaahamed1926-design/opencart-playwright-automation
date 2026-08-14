@@ -6,7 +6,9 @@ The framework automates Customer, Admin, and Guest application workflows using a
 
 The project also integrates directly with **MySQL** to support test-data cleanup and cross-layer validation, allowing UI operations to be independently verified against the application's persisted database state.
 
-The framework covers both the **OpenCart Admin Portal** and **Customer Portal** and is being continuously expanded as part of my automation engineering portfolio.
+The framework covers the OpenCart Admin Portal, Customer Portal, and Guest Checkout workflows and is being continuously enhanced as part of my automation engineering portfolio.
+
+The project demonstrates not only UI automation but also automation framework design, reusable business workflows, database validation, automatic test-data cleanup, and defect reporting practices commonly used in enterprise QA teams.
 
 ---
 
@@ -21,6 +23,8 @@ The framework covers both the **OpenCart Admin Portal** and **Customer Portal** 
 - Dynamic and isolated test-data generation using Faker
 - Fixture-based test setup and automatic teardown
 - Product CRUD automation
+- Customer checkout automation
+- Guest checkout automation
 - Product filtering and pagination handling
 - MySQL database integration
 - UI-to-database persistence validation
@@ -32,6 +36,9 @@ The framework covers both the **OpenCart Admin Portal** and **Customer Portal** 
 - Shopping cart quantity management
 - Checkout automation using reusable page components
 - Business-rule validation (availability before purchase)
+- Business Flow abstraction for reusable end-to-end workflows
+- Repository pattern for database operations
+- CI-ready GitHub Actions workflow
 
 ---
 
@@ -43,8 +50,40 @@ The framework covers both the **OpenCart Admin Portal** and **Customer Portal** 
 - MySQL
 - XAMPP
 - OpenCart
+- Faker
 - Playwright HTML Reporter
-- Git / GitHub
+- Git 
+- GitHub Actions
+
+---
+
+## Framework Highlights
+
+✔ Layered framework architecture
+
+✔ Page Object Model (POM)
+
+✔ Component Object Model
+
+✔ Business Flow abstraction
+
+✔ Custom Playwright fixtures
+
+✔ Environment-based configuration
+
+✔ Persistent authentication
+
+✔ Dynamic test-data generation
+
+✔ MySQL database validation
+
+✔ Automatic database cleanup
+
+✔ Repository pattern
+
+✔ End-to-end business workflows
+
+✔ Defect reporting
 
 ---
 
@@ -79,6 +118,7 @@ Examples include:
 - Admin toolbar components
 - Alert/message components
 - ProductDetailsComponent
+- Account registeration component
 
 This reduces locator duplication and improves maintainability.
 
@@ -230,17 +270,25 @@ Automated product scenarios currently include:
 
 ### Admin UI-Database Integration
 
-Database-backed scenarios include:
+The framework integrates directly with MySQL to support:
 
-- Verify a newly created product exists in the database
-- Verify updated product information is persisted
-- Verify deleted products are removed from the database
+- UI-to-database persistence validation
+- Product verification
+- Automatic cleanup of generated product data
+- Automatic cleanup of generated customer data
+- Repository-based database operations
 
 ### Customer Portal
 
 Customer authentication infrastructure and customer-side Page Objects are included in the framework.
 
 Additional customer workflows are being progressively added.
+
+### Guest
+
+- Guest checkout
+- Guest registration during checkout
+- Automatic customer cleanup
 
 ### End-to-End Business Workflows
 
@@ -268,9 +316,13 @@ The scenarios focus on business behaviour rather than isolated UI interactions.
 │   └── common/
 │
 ├── constants/
+│
+├── docs/
+│
 ├── enums/
 │
 ├── fixtures/
+├── flows/
 │
 ├── pages/
 │   ├── admin/
@@ -287,7 +339,9 @@ The scenarios focus on business behaviour rather than isolated UI interactions.
 │   │   ├── login/
 │   │   └── products/
 │   ├── customer/
+│   │   └── endToEnd/
 │   ├── guest/
+│   │   └── endToEnd/
 │   └── setup/
 │
 ├── types/
@@ -296,12 +350,13 @@ The scenarios focus on business behaviour rather than isolated UI interactions.
 │   ├── authentication/
 │   └── database/
 │
+│
 ├── playwright.config.ts
 ├── package.json
 └── README.md
 ```
-
 ---
+
 
 ## Environment Configuration
 
@@ -379,6 +434,19 @@ Trace Viewer is particularly useful for analysing failed tests by reviewing brow
 
 ---
 
+## Known Application Issues
+
+During automation development, application defects are documented using structured bug reports.
+
+Current documented issues include:
+
+|    ID   |                              Description                                    |Status|
+|---------|---------------------------------------------------------------------------------|------|
+| BUG-001 | Guest Checkout displays no payment methods                                      | Open |
+| BUG-002 | Checkout Continue button occasionally requires a second click due to AJAX issue | open |
+
+---
+
 ## Current Execution Strategy
 
 The full local suite is currently executed using a single Playwright worker.
@@ -406,10 +474,15 @@ Planned work includes:
 - Additional negative and boundary tests
 - Expanded database validation
 - API testing
-- Improved parallel test isolation
-- CI/CD integration
 - Automated execution through GitHub Actions
 - Additional reporting capabilities
+- Cypress automation framework
+- Wishlist automation
+- Password reset workflows
+- Cross-browser CI execution
+- Improved parallel test isolation
+- CI/CD integration
+- Docker-based execution
 
 ---
 

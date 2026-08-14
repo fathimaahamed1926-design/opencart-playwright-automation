@@ -60,3 +60,17 @@ export interface TestProduct {
   productName: string;
   model: string;
 }
+
+export interface NewCustomerDetails {
+  email:string;
+  telephone:number;
+  password?:string;
+  passwordConfirm?:string;
+  addressDetails:BillingInfo;
+}
+
+
+export interface ConfirmPassword {
+  password:string;
+  passwordConfirm:string;
+}

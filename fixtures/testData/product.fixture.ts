@@ -1,7 +1,7 @@
-import { TestProduct } from "../types/types";
-import { ProductDatabaseHelper } from "../utils/database/ProductDatabaseHelper";
-import { RandomDataGenerator } from "../utils/randomDataGenerator";
-import {test as adminTest } from "./admin.fixture";
+import { TestProduct } from "../../types/types";
+import { ProductDatabaseHelper } from "../../utils/database/ProductDatabaseHelper";
+import { RandomDataGenerator } from "../../utils/randomDataGenerator";
+import {test as adminTest } from "../admin.fixture";
 
 type productFixtures= {
   disposableProduct: TestProduct;
