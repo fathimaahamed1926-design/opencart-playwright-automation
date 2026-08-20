@@ -62,6 +62,8 @@ export interface TestProduct {
 }
 
 export interface NewCustomerDetails {
+  firstName?:string;
+  lastName?:string;
   email:string;
   telephone:number;
   password?:string;

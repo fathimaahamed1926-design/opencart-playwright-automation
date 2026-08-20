@@ -7,10 +7,6 @@ export class BasePage {
     this.page = page;
   }
 
-  protected async navigateToHomePage(): Promise<void> {
-    await this.page.goto('');
-  }
-
   protected async openCustomerAppPortal(): Promise<void> {
     await this.page.goto(Env.CUSTOMER_URL);
   }

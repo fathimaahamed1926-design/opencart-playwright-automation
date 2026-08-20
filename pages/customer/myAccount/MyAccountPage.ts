@@ -1,15 +1,12 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from '../../BasePage';
-import { HeaderComponent } from '../../../components/customer/HeaderComponent';
-import { FooterComponent } from '../../../components/customer/FooterComponent';
-import { AccountMenuComponent } from '../../../components/customer/AccountMenuComponent';
+import { CustomerAccountBasePage } from './CustomerAccountBasePage';
 import { EditAccountPage } from './EditAccountPage';
+import { MyAccountMessages } from '../../../constants/customer/messages';
 
 export class MyAccountPage extends BasePage {
 
-  readonly header: HeaderComponent;
-  readonly footer: FooterComponent;
-  readonly accountMenu: AccountMenuComponent;
+  readonly customerAccount: CustomerAccountBasePage;
 
   private readonly heading: Locator;
 
@@ -18,6 +15,8 @@ export class MyAccountPage extends BasePage {
   private readonly changePasswordLink: Locator;
   private readonly modifyAddressBookLink: Locator;
   private readonly modifyWishlistLink: Locator;
+  private readonly accountCreationSuccessMessage:Locator;
+  private readonly accountContinueButton:Locator;
 
   // Orders
   private readonly orderHistoryLink: Locator;
@@ -37,11 +36,13 @@ export class MyAccountPage extends BasePage {
 
     super(page);
 
-    this.header = new HeaderComponent(page);
-    this.footer = new FooterComponent(page);
-    this.accountMenu = new AccountMenuComponent(page);
+    this.customerAccount=new CustomerAccountBasePage(page);
 
     this.heading = page.locator('#content').getByRole('heading', { name: 'My Account' });
+
+    this.accountCreationSuccessMessage = page.locator('#content').getByRole('heading', {name: 'Your Account Has Been Created!'});
+
+    this.accountContinueButton = page.getByRole('link', {name: 'Continue'});
 
     // === My Account ===
 
@@ -128,4 +129,15 @@ export class MyAccountPage extends BasePage {
   async openNewsletterSubscription() {
     await this.subscribeNewsletterLink.click();
   }
+
+  async verifyAccountCreatedSuccessfully() {
+    await this.accountCreationSuccessMessage.waitFor({state:'visible', timeout:1000});
+    await this.verifyURLContains('route=account/success');
+  }
+
+  async clickContinueButton(){
+    await this.accountContinueButton.waitFor({state:'visible', timeout:1000});
+    await this.accountContinueButton.click();
+  }
+
 }

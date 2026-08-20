@@ -1,4 +1,4 @@
-import {Locator, Page, expect} from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { BillingInfo } from "../../types/types";
 
 export class AddressFormComponent {
@@ -18,16 +18,16 @@ export class AddressFormComponent {
   constructor(page: Page) {
     this.page = page;
     this.firstNameInput = page.getByRole('textbox', { name: /First Name/ });
-        this.lastNameInput = page.getByRole('textbox', { name: /Last Name/ });
-        this.address1Input = page.getByRole('textbox', { name: /Address 1/ });
-        this.cityInput = page.getByRole('textbox', { name: /City/ });
-        this.postCodeInput = page.getByRole('textbox', { name: /Post Code/ });
-        this.countrySelect = page.getByLabel('Country');
-        this.regionSelect = page.locator('#input-payment-zone');
-        this.yesDefaultRadio = page.getByRole('radio', { name: 'Yes' });
-        this.noDefaultRadio = page.getByRole('radio', { name: 'No' });
-        this.continueButton = page.getByRole('button', { name: 'Continue' });
-        this.backButton = page.getByRole('link', { name: 'Back' }); 
+    this.lastNameInput = page.getByRole('textbox', { name: /Last Name/ });
+    this.address1Input = page.getByRole('textbox', { name: /Address 1/ });
+    this.cityInput = page.getByRole('textbox', { name: /City/ });
+    this.postCodeInput = page.getByRole('textbox', { name: /Post Code/ });
+    this.countrySelect = page.getByLabel('Country');
+    this.regionSelect = page.locator('#input-payment-zone');
+    this.yesDefaultRadio = page.getByRole('radio', { name: 'Yes' });
+    this.noDefaultRadio = page.getByRole('radio', { name: 'No' });
+    this.continueButton = page.getByRole('button', { name: 'Continue' });
+    this.backButton = page.getByRole('link', { name: 'Back' });
   }
 
   async fillAddressForm(billingInfo: BillingInfo): Promise<void> {
@@ -40,13 +40,21 @@ export class AddressFormComponent {
     await this.regionSelect.selectOption(billingInfo.state);
   }
 
+  async setFirstName(firstName: string) {
+    await this.firstNameInput.fill(firstName);
+  }
+
+  async setLastName(lastName: string) {
+    await this.lastNameInput.fill(lastName);
+  }
+
   async clickContinueButton(): Promise<void> {
     await this.continueButton.click();
   }
 
   async clickBackButton(): Promise<void> {
     await this.backButton.click();
-  } 
+  }
 
   async setDefaultAddress(isDefaultAddress: boolean): Promise<void> {
     if (isDefaultAddress) {

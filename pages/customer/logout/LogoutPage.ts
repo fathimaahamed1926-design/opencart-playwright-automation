@@ -3,10 +3,12 @@ import { BasePage } from "../../BasePage";
 
 export class LogoutPage extends BasePage {
     private readonly btnContinue: Locator;
+    private readonly heading:Locator;
 
     constructor(page: Page) {
         super(page);
         this.btnContinue = page.locator('.btn.btn-primary');
+        this.heading= page.getByRole('heading', )
     }
 
     async clickContinue(): Promise<void> {

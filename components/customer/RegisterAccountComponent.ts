@@ -2,6 +2,7 @@ import { Locator, Page, expect } from "@playwright/test";
 import { AddressFormComponent } from "./AddressFormComponent";
 import { BillingInfo, NewCustomerDetails} from "../../types/types";
 
+//this class is especially for new customer registration via checkout page
 export class RegisterAccountComponent {
   private readonly page:Page;
   private readonly addressForm: AddressFormComponent;
@@ -34,19 +35,24 @@ export class RegisterAccountComponent {
     await this.telephoneInput.fill(telephone.toString());
   }
 
-  async setPassword(password:string) {
-    await this.passwordInput.fill(password);
+  async setPassword(password?:string) {
+    if(password){
+      await this.passwordInput.fill(password);
+    }
+    
   }
 
-  async setPasswordConfirm(passwordConfirm:string) {
-    await this.passwordConfirmInput.fill(passwordConfirm);
+  async setPasswordConfirm(passwordConfirm?:string) {
+    if(passwordConfirm){
+      await this.passwordConfirmInput.fill(passwordConfirm);
+    }
   }
 
   async setAddressDetails(addressDetails:BillingInfo) {
     await this.addressForm.fillAddressForm(addressDetails);
   }
 
-  async setAccountDetails(accountDetails:NewCustomerDetails) {
+  async setRegisterAccountDetails(accountDetails:NewCustomerDetails) {
     await this.setEmail(accountDetails.email);
     await this.setTelephone(accountDetails.telephone);
     if(accountDetails.password){

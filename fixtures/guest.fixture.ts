@@ -4,13 +4,17 @@ import { LoginPage } from "../pages/customer/login/LoginPage";
 import { CheckoutPage } from "../pages/customer/cart/CheckoutPage";
 import { ProductPage } from "../pages/customer/product/ProductPage";
 import { ShoppingCartPage } from "../pages/customer/cart/ShoppingCartPage";
+import { MyAccountPage } from "../pages/customer/myAccount/MyAccountPage";
+import { RegisterPage } from "../pages/customer/register/RegisterPage";
 
 type guestFixtures = {
   homePage:HomePage;
   loginPage:LoginPage;
   checkoutPage:CheckoutPage;
   productPage:ProductPage;
-  shoppingCartPage:ShoppingCartPage
+  shoppingCartPage:ShoppingCartPage;
+  myAccountPage:MyAccountPage;
+  registerPage:RegisterPage;
 }
 
 export const test = base.extend<guestFixtures>({
@@ -32,8 +36,16 @@ export const test = base.extend<guestFixtures>({
 
   shoppingCartPage:async({page},use)=> {
     await use(new ShoppingCartPage(page));
-  }
+  },
 
+  myAccountPage:async({page},use)=> {
+    await use(new MyAccountPage(page));
+  },
+
+  registerPage:async({page},use)=> {
+    await use(new RegisterPage(page));
+  }
+  
 })
 
 export {expect} from "@playwright/test";

@@ -10,7 +10,7 @@ export async function loginAsCustomer(page:Page) {
   const myAccountPage= new MyAccountPage(page);
 
   await homePage.openHomePage();
-  await myAccountPage.header.clickLogin();
+  await myAccountPage.customerAccount.header.clickLogin();
   await loginPage.login(Env.CUSTOMER_USERNAME, Env.CUSTOMER_PASSWORD);
 
 }

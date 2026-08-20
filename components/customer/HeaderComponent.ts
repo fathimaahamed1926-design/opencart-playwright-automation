@@ -32,11 +32,11 @@ export class HeaderComponent {
 
         this.myAccountLink = topLinks.locator('.dropdown-toggle').filter({ hasText: /My Account/ });
 
-        this.downloadsLink = page.getByRole('link', { name: 'Downloads' });
+        this.downloadsLink = topLinks.getByRole('link', { name: 'Downloads' });
 
-        this.transactionsLink = page.getByRole('link', { name: 'Transactions' });
+        this.transactionsLink = topLinks.getByRole('link', { name: 'Transactions' });
 
-        this.logoutLink = page.getByRole('link', { name: 'Logout' });
+        this.logoutLink = topLinks.getByRole('link', { name: 'Logout' });
 
         this.wishlistLink = topLinks.locator('#wishlist-total');
 
