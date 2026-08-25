@@ -19,15 +19,7 @@ export const test = base.extend<CustomerRegistrationData>({
       telephone: Number(RandomDataGenerator.generateRandomPhoneNumber()),
       password: password,
       passwordConfirm: password,
-      addressDetails: {
-        firstName: RandomDataGenerator.generateRandomFirstName(),
-        lastName: RandomDataGenerator.generateRandomLastName(),
-        address1: RandomDataGenerator.generateRandomAddress(),
-        city: RandomDataGenerator.generateRandomCity(),
-        postcode: RandomDataGenerator.generateRandomPostalCode(),
-        country: "Australia",
-        state: RandomDataGenerator.generateRandomState()
-      }
+      addressDetails: RandomDataGenerator.generateRandomAddressDetails()
     }
     await use(randomCustomerRegData);
 

@@ -6,6 +6,8 @@ import { ShoppingCartPage } from '../pages/customer/cart/ShoppingCartPage';
 import { CheckoutPage } from '../pages/customer/cart/CheckoutPage';
 import { MyAccountPage } from '../pages/customer/myAccount/MyAccountPage';
 import { RegisterPage } from '../pages/customer/register/RegisterPage';
+import { WishlistPage } from '../pages/customer/myAccount/WishListPage';
+import { AddressBookPage } from '../pages/customer/myAccount/AddressBookPage';
 
 type customerFixtures = {
   homePage: HomePage;
@@ -15,6 +17,8 @@ type customerFixtures = {
   checkoutPage: CheckoutPage;
   myAccountPage: MyAccountPage;
   registerPage: RegisterPage;
+  wishListPage:WishlistPage;
+  addressBookPage:AddressBookPage;
 }
 
 export const test = base.extend<customerFixtures>({
@@ -41,8 +45,13 @@ export const test = base.extend<customerFixtures>({
   },
   registerPage: async({page}, use)=> {
     await use(new RegisterPage(page));
+  },
+  wishListPage:async({page},use)=> {
+    await use(new WishlistPage(page));
+  },
+  addressBookPage:async({page},use)=> {
+    await use(new AddressBookPage(page));
   }
-
 })
 export { expect } from "@playwright/test";
 

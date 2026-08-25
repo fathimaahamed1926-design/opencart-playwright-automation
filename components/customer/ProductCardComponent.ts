@@ -1,29 +1,34 @@
 import { Locator, Page } from "@playwright/test";
+import { AlertComponent } from "../common/AlertComponent";
 
 export class ProductCard {
 
-  constructor(private readonly container: Locator) {
+    constructor(private readonly container: Locator) {
     
-   }
+    }
 
     private get title() {
-      return this.container.locator('h4 a');
-     }
+        return this.container.locator('h4 a');
+    }
 
     private get image() {
-    return this.container.locator(".image a");
-     }
+        return this.container.locator(".image a");
+    }
 
-    private  get price() { 
-      return this.container.locator('.price');
-     }
+    private get price() {
+        return this.container.locator('.price');
+    }
 
-    private get addToCartButton() { 
-      return this.container.getByRole('button', { name: 'Add to Cart' }); 
+    private get addToCartButton() {
+        return this.container.getByRole('button', { name: 'Add to Cart' });
     }
 
     private get compareThisProductButton() {
-      return this.container.locator("button[data-original-title='Compare this Product']"); 
+        return this.container.locator("button[data-original-title='Compare this Product']");
+    }
+
+    private get addToWishListButton() {
+        return this.container.locator("button[data-original-title='Add to Wish List']");
     }
 
     async clickProduct() {
@@ -34,7 +39,7 @@ export class ProductCard {
         await this.image.click();
     }
 
-     async addToCart() {
+    async addToCart() {
         await this.addToCartButton.click();
     }
 
@@ -50,5 +55,8 @@ export class ProductCard {
         return await this.price.textContent() || '';
     }
 
+    async addToWishList() {
+        await this.addToWishListButton.click();
+    }
 
 }

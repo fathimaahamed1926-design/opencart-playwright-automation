@@ -1,19 +1,45 @@
-import {test as base} from '@playwright/test';  // {name} means specific classes import from playwright package
-import testData from '../../testdata/customer/checkoutAddressData.json'; // name without braces means default imprt of the whole file
+import {test as customerTest} from '../customer.fixture';  // {name} means specific classes import from playwright package
 import {BillingInfo, ShippingInfo} from '../../types/types'; // importing the BillingInfo interface from types.ts file
+import { RandomDataGenerator } from '../../utils/randomDataGenerator';
+import { AddressDatabaseHelper } from '../../utils/database/AddressDatabaseHelper';
+import { DefaultValues } from '../../constants/customer/const';
 
 type AddressFixtures = {
-  billingInfo: BillingInfo;  // defining the type of billingInfo as the BillingInfo interface
+  billingInfo: BillingInfo;  
   shippingInfo: ShippingInfo;
+  registerAddressForCleanup:(address:BillingInfo) => void;
 }
 
-export const test = base.extend<AddressFixtures> ({  // extending the base test with our custom fixtures
-    billingInfo: async({},use)=> {             // worker function for billingInfo fixture, can pass other dependencies as first argument if needed, use enables us to use the fixture value in our tests i.e. autocomplete the values
-      await use(testData.billingAddress);       
+export const test = customerTest.extend<AddressFixtures> ({  
+    billingInfo: async({},use)=> {  
+      const addressData:BillingInfo = RandomDataGenerator.generateRandomAddressDetails();
+      await use(addressData);                
+    },
+
+    registerAddressForCleanup: async({}, use)=> {
+      let addressToCleanup: BillingInfo [] = [] ;
+      const registerAddress = (address:BillingInfo) => {
+        addressToCleanup.push(address);
+        console.log(`📝 Registered address for cleanup: ${address.address1}`);
+      }
+      await use(registerAddress);
+
+      console.log("🧹 Starting database cleanup...");
+
+      if(!addressToCleanup) {
+        console.log("🧹 No address registered for cleanup.");
+        return;
+      }
+      for(const address of addressToCleanup) {
+      await AddressDatabaseHelper.deleteAddress(DefaultValues.CUSTOMER_ID, address.address1);
+      }
+
+      console.log("🧹 Database cleanup finished.");
     },
 
     shippingInfo: async({}, use)=> {
-      await use(testData.shippingAddress); 
+      const addressData:ShippingInfo = RandomDataGenerator.generateRandomAddressDetails();
+      await use(addressData);    
     }
   }
 );

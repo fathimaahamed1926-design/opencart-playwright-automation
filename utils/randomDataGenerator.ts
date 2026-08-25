@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { options } from "axios";
 import { AustralianStates } from "../constants/australia";
+import { BillingInfo } from "../types/types";
 
 export class RandomDataGenerator {
   static generateRandomEmail(): string {
@@ -57,5 +58,19 @@ export class RandomDataGenerator {
 
   static generateRandomProductModel(): string {
     return `Automation Model-${faker.string.alphanumeric(6)}`;
+  }
+
+  static generateRandomAddressDetails():BillingInfo {
+    return {
+        firstName: this.generateRandomFirstName(),
+        lastName: this.generateRandomLastName(),
+        address1: this.generateRandomAddress(),
+        address2: this.generateRandomAddress(),
+        companyName: this.generateRandomCompanyName(),
+        city: this.generateRandomCity(),
+        postcode: this.generateRandomPostalCode(),
+        state: this.generateRandomState(),
+        country: "Australia"
+    };
   }
 }

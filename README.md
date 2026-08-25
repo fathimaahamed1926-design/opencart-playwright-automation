@@ -153,8 +153,63 @@ test(
   }
 );
 ```
-
 The fixture creates isolated test data and performs cleanup after the test completes.
+
+For customer address workflows, the fixture also provides registerAddressForCleanup() to track addresses created or updated during a test. Registered addresses are cleaned up during fixture teardown, helping prevent test data from remaining in the database when a test fails before UI deletion.
+
+Example:
+
+registerAddressForCleanup(billingInfo);
+
+// After editing the address
+registerAddressForCleanup(updatedAddress);
+
+This keeps address tests isolated while allowing the test itself to validate the complete add, edit and delete workflow through the UI.
+
+The cleanup mechanism acts as a safety net rather than replacing UI deletion.
+
+The test continues to validate the complete CRUD workflow through the UI:
+
+ADD → VERIFY → EDIT → VERIFY → DELETE → VERIFY
+
+The database cleanup only removes test data that remains after the test.
+
+# Successful test:
+
+UI creates address
+      ↓
+UI edits address
+      ↓
+UI deletes address
+      ↓
+Test passes
+      ↓
+Fixture cleanup
+      ↓
+Address no longer exists
+      ↓
+No database deletion required
+
+
+# Failed test:
+
+If a test fails before the UI deletion is completed:
+
+UI creates address
+      ↓
+UI edits address
+      ↓
+Test fails
+      ↓
+Fixture teardown executes
+      ↓
+Database checks for registered address
+      ↓
+Address still exists
+      ↓
+DELETE FROM oc_address
+
+This prevents failed tests from leaving unwanted records in the database.
 
 ---
 

@@ -5,7 +5,7 @@ export class HeaderComponent {
     private readonly page: Page;
 
     private readonly logo: Locator;
-    //private readonly myAccountMenu: Locator;
+    private readonly myAccountMenu: Locator;
     private readonly myAccountLink: Locator;
     private readonly orderHistoryLink: Locator;
     private readonly downloadsLink: Locator;
@@ -26,11 +26,13 @@ export class HeaderComponent {
 
         this.logo = page.getByRole('link', { name: 'Your Store' });
 
-        //this.myAccountMenu = page.locator('#top-links .dropdown-toggle').filter({ hasText: /My Account/ });
-
         const topLinks = page.locator('#top-links');
 
-        this.myAccountLink = topLinks.locator('.dropdown-toggle').filter({ hasText: /My Account/ });
+        //this.myAccountMenu = topLinks.locator('.dropdown-toggle').getByTitle('My Account');
+
+        this.myAccountMenu = topLinks.locator('a.dropdown-toggle');
+
+        this.myAccountLink = topLinks.locator('.dropdown-menu').getByRole('link', {name: 'My Account'});
 
         this.downloadsLink = topLinks.getByRole('link', { name: 'Downloads' });
 
@@ -63,7 +65,7 @@ export class HeaderComponent {
     }
 
     async openMyAccountMenu(): Promise<void> {
-        await this.myAccountLink.click();
+        await this.myAccountMenu.click();
     }
 
     async clickLogin(): Promise<void> {

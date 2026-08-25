@@ -2,7 +2,6 @@ import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from '../../BasePage';
 import { CustomerAccountBasePage } from './CustomerAccountBasePage';
 import { EditAccountPage } from './EditAccountPage';
-import { MyAccountMessages } from '../../../constants/customer/messages';
 
 export class MyAccountPage extends BasePage {
 
@@ -50,7 +49,7 @@ export class MyAccountPage extends BasePage {
 
     this.changePasswordLink = page.getByRole('link', { name: 'Change your password' });
 
-    this.modifyAddressBookLink = page.getByRole('link', { name: 'Modify your address book' });
+    this.modifyAddressBookLink = page.getByRole('link', { name: 'Modify your address book entries' });
 
     this.modifyWishlistLink = page.getByRole('link', { name: 'Modify your wish list' });
 

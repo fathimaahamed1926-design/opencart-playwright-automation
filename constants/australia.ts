@@ -6,5 +6,5 @@ export const AustralianStates = [
   "South Australia",
   "Tasmania",
   "Victoria",
-  "Western Australia",
+  "Western Australia"
 ];

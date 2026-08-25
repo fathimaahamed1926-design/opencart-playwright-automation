@@ -37,4 +37,8 @@ export class ProductPage extends BasePage {
     await this.alert.verifySuccessMessage(successMessage);
   }
 
+  async verifyWishlistAddedSuccessMessage(productName:string) {
+        await this.alert.verifySuccessMessage(`Success: You have added ${productName} to your wish list!`);
+    }
+
 }
