@@ -1,38 +1,22 @@
-import { test } from "../../../fixtures/customer.fixture"
+import { test } from "../../../fixtures/customer.fixture";
 
 
 test.describe("End to End Tests-Customer Purchase Flow", () => {
-  test("Customer can place order successfully", async ({ homePage, myAccountPage, shoppingCartPage, checkoutPage, productPage }) => {
+  test("Customer can place order successfully", async ({ purchaseFlow }) => {
 
     const productName = "MacBook Air";
 
-    await homePage.openHomePage();
+    await purchaseFlow.addProductToCart(productName);
 
-    await myAccountPage.customerAccount.header.searchProduct(productName);
+    await purchaseFlow.navigateToShoppingCart();
 
-    const searchItem = await productPage.getProductByName(productName);
-    await searchItem.clickProduct();
+    await purchaseFlow.updateShoppingCart(productName,"2")
 
-    const availability = await productPage.productDetails.getAvailability();
-    console.log("availability: ", availability);
-    if (availability === "In Stock") {
-      await productPage.productDetails.addToCart();
-    }
+    await purchaseFlow.proceedToCheckout();
 
-    const expectedMessage = `Success: You have added ${productName} to your shopping cart!`;
-    await productPage.verifyProductAddedSuccessMessage(expectedMessage);
-    await productPage.header.navigateToShoppingCart();
+    await purchaseFlow.fillCheckoutDetailsAndConfirmOrder();
 
-    await shoppingCartPage.updateQuantity(productName, "2");
-
-    await shoppingCartPage.proceedToCheckout();
-
-    await checkoutPage.fillBillingDetails();
-    await checkoutPage.fillDeliveryDetails();
-    await checkoutPage.chooseDeliveryMethod();
-    await checkoutPage.selectPaymentMethod();
-    await checkoutPage.confirmOrder();
-    await checkoutPage.verifyOrderPlacedSuccessfully();
+    await purchaseFlow.verifyOrderPlaced();
 
   })
 })

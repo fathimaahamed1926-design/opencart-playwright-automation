@@ -62,7 +62,8 @@ export class AdminSidebarComponent {
 
         //---------------- Sales ----------------//
 
-        this.ordersMenu = page.getByRole('link', { name: 'Orders' });
+        //this.ordersMenu = page.getByRole('link', { name: 'Orders', exact:true });
+        this.ordersMenu = page.locator("#menu-sale").locator("a[href*='route=sale/order&user']");
         this.recurringOrdersMenu = page.getByRole('link', { name: 'Recurring Orders' });
         this.returnsMenu = page.getByRole('link', { name: 'Returns' });
         this.giftVouchersMenu = page.getByRole('link', { name: 'Gift Vouchers' });

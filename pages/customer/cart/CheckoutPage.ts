@@ -13,7 +13,8 @@ export class CheckoutPage extends BasePage {
     readonly registerAccount: RegisterAccountComponent;
     readonly alert: AlertComponent;
     private readonly checkoutHeader: Locator;
-    private readonly addressDropdown: Locator;
+    private readonly billingDetailsAddressDropdown: Locator;
+    private readonly deliveryDetailsAddressDropdown: Locator;
     private readonly flatRateRadio: Locator;
     private readonly commentSection: Locator;
     private readonly cashOnDeliveryRadio: Locator;
@@ -56,7 +57,8 @@ export class CheckoutPage extends BasePage {
         this.useNewBillingAddressRadio = this.billingDetailsPanel.locator('input[value="new"]');
         this.useExistingDeliveryAddressRadio = this.deliveryDetailsPanel.locator('input[value="existing"]');
         this.useNewDeliveryAddressRadio = this.deliveryDetailsPanel.locator('input[value="new"]');
-        this.addressDropdown = page.locator('select[name="address_id"]');
+        this.billingDetailsAddressDropdown = this.billingDetailsPanel.locator('select[name="address_id"]');
+        this.deliveryDetailsAddressDropdown = this.deliveryDetailsPanel.locator('select[name="address_id"]');
         this.flatRateRadio = page.locator('input[value="flat.flat"]');
         this.commentSection = page.locator('textarea[name="comment"]');
         this.cashOnDeliveryRadio = page.locator('input[value="cod"]');
@@ -79,6 +81,11 @@ export class CheckoutPage extends BasePage {
         return await this.checkoutHeader.isVisible();
     }
 
+    async verifyCheckoutPageLoaded():Promise<void> {
+        await this.verifyURLContains('route=checkout/checkout');
+        await this.verifyElementVisible(this.checkoutHeader);
+    }
+
     async fillBillingAddress(billingInfo: BillingInfo): Promise<void> {
         await this.addressForm.fillAddressForm(billingInfo);
     }
@@ -90,7 +97,7 @@ export class CheckoutPage extends BasePage {
         } else {
             await this.useExistingBillingAddressRadio.check();
             // Optionally, select an existing address from the dropdown if there are multiple addresses
-            await this.addressDropdown.selectOption({ index: 0 }); // Example of selecting an existing address
+            await this.billingDetailsAddressDropdown.selectOption({ index:0 }); // Example of selecting an existing address
         }
         await this.continueCheckoutStep(this.billingDetailsContinueButton, this.deliveryDetailsPanel); //introducing this step because of an AJAX error in loading the next panel
     }
@@ -101,10 +108,9 @@ export class CheckoutPage extends BasePage {
             await this.addressForm.fillAddressForm(addressdata);
         } else {
             await this.useExistingDeliveryAddressRadio.check();
-            await this.addressDropdown.selectOption({ index: 0 });
+            await this.deliveryDetailsAddressDropdown.selectOption({ index: 0 });
         }
         await this.continueCheckoutStep(this.deliveryDetailsContinueButton, this.deliveryMethodPanel)
-        //await this.deliveryDetailsContinueButton.click();
     }
 
     async chooseDeliveryMethod(comment?: string): Promise<void> {
@@ -139,12 +145,21 @@ export class CheckoutPage extends BasePage {
 
     // because of an AJAX error, occasionally continue button needed to be clicked twice to expand the next panel
     private async continueCheckoutStep(button: Locator, nextPanel: Locator): Promise<void> {
+        
         await button.click();
 
-        if (!(await nextPanel.isVisible()) && await button.isEnabled()) {
-            await button.click();
-            await nextPanel.waitFor({ state: 'visible', timeout: 5000 });  //waiting untill the loading status is resolved
-        }
+       try{
+        // Give the first AJAX request time to open the next panel
+        await nextPanel.waitFor({ state: 'visible', timeout: 3000 });
+       } catch{
+        // First attempt did not open the next panel.
+        // OpenCart may require the button to be clicked again after the AJAX/loading state has completed.
+        console.log("⚠️ Checkout panel did not open after first click. Retrying..." );
+        await button.waitFor({ state: 'visible', timeout: 3000 });
+        await button.click();
+        await nextPanel.waitFor({ state: 'visible', timeout: 3000 });
+       }
+
         await expect(nextPanel).toBeVisible();
 
     }

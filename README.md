@@ -333,6 +333,28 @@ The framework integrates directly with MySQL to support:
 - Automatic cleanup of generated customer data
 - Repository-based database operations
 
+### Order Verification E2E
+
+Implemented an end-to-end order verification flow across the Customer and Admin portals:
+
+Customer Portal
+→ Place Order
+→ Database: Retrieve newly created Order ID
+→ Admin Portal
+→ Search Order
+→ Verify Order Status
+→ Verify Customer
+→ Verify Product
+→ Verify Quantity
+
+Key implementation:
+- Customer and Admin sessions use separate browser contexts.
+- Customer authentication uses Playwright `storageState`.
+- Admin authentication uses `loginAsAdmin()` because the Admin portal uses dynamic session tokens.
+- Database helper retrieves the newly created `order_id`.
+- POMs are used for Orders and Order Details pages.
+- The test validates data across both UI portals using the same order.
+
 ### Customer Portal
 
 Customer authentication infrastructure and customer-side Page Objects are included in the framework.

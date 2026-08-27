@@ -131,6 +131,7 @@ export class OrdersPage extends AdminBasePage {
     if(filterOptions.dateModified !== undefined) {
       await this.dateModifiedInput.fill(filterOptions.dateModified);
     }
+    await this.filterButton.click();
   }
 
 

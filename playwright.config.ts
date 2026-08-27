@@ -78,7 +78,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.ADMIN_URL,
-        storageState: 'playwright/.auth/admin.json',
+        //storageState: 'playwright/.auth/admin.json',
       },
       //dependencies: ['admin-setup'],
     },

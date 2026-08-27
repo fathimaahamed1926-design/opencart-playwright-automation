@@ -33,8 +33,8 @@ export class ProductPage extends BasePage {
     await this.sortByDropdown.selectOption({label: option});
   }
 
-  async verifyProductAddedSuccessMessage(successMessage:string) {
-    await this.alert.verifySuccessMessage(successMessage);
+  async verifyProductAddedSuccessMessage(productName:string) {
+    await this.alert.verifySuccessMessage(`Success: You have added ${productName} to your shopping cart!`);
   }
 
   async verifyWishlistAddedSuccessMessage(productName:string) {

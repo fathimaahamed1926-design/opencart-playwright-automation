@@ -49,6 +49,13 @@ export class ProductDetailsComponent {
     await (this.addToCartButton).click();
   }
 
+  async addToCartIfProductIsAvailable() {
+    const productAvailable = await this.verifyProductIsInStock();
+    if(productAvailable){
+    await this.addToCart();
+    }
+  }
+
   async verifyProductDetailsLoaded() {
     expect(this.page).toHaveURL('route=product/product/');
   }
@@ -61,8 +68,13 @@ export class ProductDetailsComponent {
       await this.compareThisProductButton.click(); 
   }
 
-  async verifyProductIsInStock(): Promise<void> {
+  async verifyProductIsInStock(): Promise<boolean> {
     const availability = await this.getAvailability();
-    expect(availability).toBe("In Stock");
+    if(availability==="In Stock")
+    {
+      return true;
+    } else{
+      return false;
+    }
 }
 }
