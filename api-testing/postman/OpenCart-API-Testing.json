@@ -1,0 +1,202 @@
+{
+  "info": {
+    "_postman_id": "0f24b5e0-8c22-43a1-89ed-ea6b18abdb7b",
+    "name": "Opencart API Testing",
+    "description": "Postman API test collection for the local OpenCart application.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57900815",
+    "_collection_link": "https://go.postman.co/collection/57900815-0f24b5e0-8c22-43a1-89ed-ea6b18abdb7b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Add Product to Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n}); \n\npm.test(\"Response contains success message\", function () {\n    const jsonData= pm.response.json();\n    pm.expect(jsonData.success).to.exist;\n});\n\npm.test(\"Response contains cart total\", function() {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.total).to.exist;\n})\n\npm.test(\"Correct product was added\", function(){\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.success).to.include(\"MacBook\");\n})"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "product_id",
+                  "value": "43"
+                },
+                {
+                  "key": "quantity",
+                  "value": "2"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost/opencart/upload/index.php?route=checkout/cart/add",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "opencart",
+                "upload",
+                "index.php"
+              ],
+              "query": [
+                {
+                  "key": "route",
+                  "value": "checkout/cart/add"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cart Information",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Cart information is returned\", function() {\n    const response = pm.response.text();\n    pm.expect(response).to.include(\"MacBook\");\n});\n\npm.test(\"Cart containts expected quanity\", function() {\n    const response = pm.response.text();\n    const match = response.match(/<td class=\"text-right\">\\s*x\\s*(\\d+)\\s*<\\/td>/);\n    console.log(\"Quantity match:\", match);\n    pm.expect(match).to.not.be.null;\n    const quantity = Number(match[1]);\n    console.log(\"Quantity:\", quantity);\n    pm.expect(quantity).to.equal(2);\n});\n\nconst response = pm.response.text();\nconst match = response.match(/cart\\.remove\\('(\\d+)'\\)/);\npm.expect(match).to.not.be.null;\nconst cartKey = match[1];\npm.collectionVariables.set(\"cartKey\", cartKey);\nconsole.log(\"Cart Key:\", cartKey);"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableCookies": false,
+            "followRedirects": true,
+            "strictSSL": false
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/opencart/upload/index.php?route=common/cart/info",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "opencart",
+                "upload",
+                "index.php"
+              ],
+              "query": [
+                {
+                  "key": "route",
+                  "value": "common/cart/info"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Product from Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Remove product returns 200\", function() {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Respose contains success message\", function() {\n    const response = pm.response.json();\n    pm.expect(response.success).to.include(\"You have modified your shopping cart!\");\n});\n\npm.test(\"Total item shows zero items\", function () {\n    const response = pm.response.json();\n    pm.expect(response.total).to.include(\"0 item(s)\");\n});\n\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "key",
+                  "value": "{{cartKey}}"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost/opencart/upload/index.php?route=checkout/cart/remove",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "opencart",
+                "upload",
+                "index.php"
+              ],
+              "query": [
+                {
+                  "key": "route",
+                  "value": "checkout/cart/remove"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Empty Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {\n  pm.response.to.have.status(200);\n});\n\npm.test(\"Cart is empty\", function() {\n    const response = pm.response.text();\n    pm.expect(response).to.include(\"Your shopping cart is empty!\");\n});\n\npm.test(\"Cart shows 0 items\", function() {\n    const response = pm.response.text();\n    pm.expect(response).to.match(/0 item\\(s\\)/);\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost/opencart/upload/index.php?route=common/cart/info",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "opencart",
+                "upload",
+                "index.php"
+              ],
+              "query": [
+                {
+                  "key": "route",
+                  "value": "common/cart/info"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "→ POST Add Product  \n→ GET Cart Information  \n→ Extract cartKey  \n→ POST Remove Product  \n→ GET Empty Cart"
+    }
+  ],
+  "variable": [
+    {
+      "key": "cartKey",
+      "value": ""
+    }
+  ]
+}

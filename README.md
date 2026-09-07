@@ -383,6 +383,44 @@ The scenarios focus on business behaviour rather than isolated UI interactions.
 
 ---
 
+## API Testing – Postman
+
+### Objective
+
+API testing was performed against the OpenCart application
+using Postman.
+
+### Cart API Workflow
+
+POST Add Product
+       ↓
+GET Cart Information
+       ↓
+Extract cartKey
+       ↓
+POST Remove Product
+       ↓
+GET Cart Information
+       ↓
+Verify cart is empty
+
+### Test Coverage
+
+| Request | Method | Validation |
+|---|---|---|
+| Add Product | POST | Status, success message, product |
+| Cart Information | GET | Status, product, quantity, cartKey |
+| Remove Product | POST | Status, removal response, zero items |
+| Empty Cart | GET | Status, 0 items, empty message |
+
+### Collection Runner Results
+
+![Postman Collection Results](docs/images/postman-cart-run-results.png)
+
+**Result: 13/13 tests passed**
+
+---
+
 ## Project Structure
 
 ```text
